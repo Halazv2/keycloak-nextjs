@@ -1,16 +1,17 @@
-import * as React from 'react'
-import Head from 'next/head'
+import * as React from "react";
+import Head from "next/head";
 
-import { Footer } from './Footer'
-import { Header } from './Header'
+import { Footer } from "./Footer";
+import { Header } from "./Header";
 
 type Props = {
-  title?: string
-}
+  children: string;
+  title?: string;
+};
 
 export const Layout: React.FC<Props> = ({
-   children,
-  title = ' Keycloak Example',
+  children,
+  title = " Keycloak Example",
 }) => (
   <div>
     <Head>
@@ -27,4 +28,4 @@ export const Layout: React.FC<Props> = ({
     <div className="container my-5">{children}</div>
     <Footer />
   </div>
-)
+);

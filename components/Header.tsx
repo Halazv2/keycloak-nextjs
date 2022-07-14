@@ -1,11 +1,29 @@
-import { useKeycloak } from '@react-keycloak/ssr'
-import type { KeycloakInstance } from 'keycloak-js'
-import Link from 'next/link'
-import * as React from 'react'
-
+import { useKeycloak } from "@react-keycloak/ssr";
+import type { KeycloakInstance, KeycloakTokenParsed } from "keycloak-js";
+import Link from "next/link";
+import * as React from "react";
+import { getCookie, removeCookie, setCookie } from "typescript-cookie";
+import { useEffect } from "react";
+type ParsedToken = KeycloakTokenParsed & {
+  email?: string;
+  preferred_username?: string;
+  given_name?: string;
+  family_name?: string;
+};
 export const Header: React.FC = () => {
-  const { keycloak } = useKeycloak<KeycloakInstance>()
-
+  const { keycloak } = useKeycloak<KeycloakInstance>();
+  const parsedToken: ParsedToken | undefined = keycloak?.tokenParsed;
+  const isAdmin =
+    keycloak?.authenticated && parsedToken?.roles?.includes("admin")
+      ? true
+      : false;
+  const token = keycloak?.idToken;
+  const refreshToken = keycloak?.refreshToken;
+  useEffect(() => {
+    setCookie("isAdmin", isAdmin);
+    setCookie("token", token);
+    setCookie("refreshToken", refreshToken);
+  }, [keycloak?.authenticated]);
   return (
     <header className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
       <Link href="/">
@@ -25,7 +43,7 @@ export const Header: React.FC = () => {
             className="mx-2 btn btn-outline-primary"
             onClick={() => {
               if (keycloak) {
-                window.location.href = keycloak.createAccountUrl()
+                window.location.href = keycloak.createAccountUrl();
               }
             }}
           >
@@ -37,7 +55,15 @@ export const Header: React.FC = () => {
             className="mx-2 btn btn-outline-danger"
             onClick={() => {
               if (keycloak) {
-                window.location.href = keycloak.createLogoutUrl()
+                window.location.href = keycloak.createLogoutUrl();
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i];
+                  var eqPos = cookie.indexOf("=");
+                  var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                  document.cookie =
+                    name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                }
               }
             }}
           >
@@ -51,8 +77,9 @@ export const Header: React.FC = () => {
             className="mx-2 btn btn-outline-primary"
             onClick={() => {
               if (keycloak) {
-                window.location.href = keycloak.createRegisterUrl()
+                window.location.href = keycloak.createRegisterUrl();
               }
+              removeCookie("online");
             }}
           >
             Signup
@@ -63,7 +90,7 @@ export const Header: React.FC = () => {
             className="mx-2 btn btn-outline-success"
             onClick={() => {
               if (keycloak) {
-                window.location.href = keycloak.createLoginUrl()
+                window.location.href = keycloak.createLoginUrl();
               }
             }}
           >
@@ -72,5 +99,5 @@ export const Header: React.FC = () => {
         </>
       )}
     </header>
-  )
-}
+  );
+};

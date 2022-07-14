@@ -1,28 +1,41 @@
-import '../styles/globals.css'
-import '../styles/index.css'
-import { ReactKeycloakProvider } from '@react-keycloak/web'
-import cookie from 'cookie'
-import * as React from 'react'
-import type { IncomingMessage } from 'http' //  i used this to get the cookies from the request
-import type { AppProps, AppContext } from 'next/app' // i use app
-import { SSRKeycloakProvider, SSRCookies } from '@react-keycloak/ssr' // provides SSR context for keycloak because it's not available in the client
+import "../styles/globals.css";
+import "../styles/index.css";
+// import RenderOnAnonymous from "../components/RenderOnAnonymous";
+import { ReactKeycloakProvider } from "@react-keycloak/web";
+import cookie from "cookie";
+import * as React from "react";
+import type { IncomingMessage } from "http"; //  i used this to get the cookies from the request
+import type { AppProps, AppContext } from "next/app"; // i use app
+import { SSRKeycloakProvider, SSRCookies } from "@react-keycloak/ssr"; // provides SSR context for keycloak because it's not available in the client
+import { useEffect } from "react";
+import Keycloak from "keycloak-js";
 const KeycloakConfig = {
-  realm: "fm6",// name of the realm
-  url: "https://keycloaktest.ayouris.net/auth",// url of the Keycloak server
+  realm: "fm6", // name of the realm
+  url: "https://keycloaktest.ayouris.net/auth", // url of the Keycloak server
   clientId: "sga-front", // clientId of the application
-}
+};
 interface InitialProps {
-  cookies: unknown
+  cookies: unknown;
+  keycloak: Keycloak.KeycloakInstance;
+  token: string;
+  authenticated: boolean;
+  userInfo: Keycloak.KeycloakTokenParsed;
 }
+
 function MyApp({ Component, pageProps, cookies }: AppProps & InitialProps) {
+  // useEffect(() => {
+
+
+  // });
+
   return (
-    <SSRKeycloakProvider    
+    <SSRKeycloakProvider
       keycloakConfig={KeycloakConfig}
       persistor={SSRCookies(cookies)}
       init={true}
       initOnSSR={true}
       initOptions={{
-        onLoad: 'check-state',
+        onLoad: "check-state",
         checkLoginIframe: false,
         checkLoginIframeInterval: 5,
         token: cookies.token,
@@ -54,25 +67,25 @@ function MyApp({ Component, pageProps, cookies }: AppProps & InitialProps) {
         middleName: cookies.middleName,
         nickname: cookies.nickname,
         profile: cookies.profile,
-        website: cookies.we
+        website: cookies.we,
       }}
-  
     >
+      {/* <RenderOnAnonymous> */}
       <Component {...pageProps} />
+      {/* </RenderOnAnonymous> */}
     </SSRKeycloakProvider>
-  
-  )
-
+  );
 }
-function parseCookies(req?: IncomingMessage) { // IncomingMessage for 
+function parseCookies(req?: IncomingMessage) {
+  // IncomingMessage for
   if (req) {
-    return cookie.parse(req.headers.cookie || '')
+    return cookie.parse(req.headers.cookie || "");
   }
-  return {}
+  return {};
 }
 MyApp.getInitialProps = async (appContext: AppContext) => {
   // Extract cookies from the request
-  return { cookies: parseCookies(appContext?.ctx?.req) }
-}
+  return { cookies: parseCookies(appContext?.ctx?.req) };
+};
 
-export default MyApp
+export default MyApp;
