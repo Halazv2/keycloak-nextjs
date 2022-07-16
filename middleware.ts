@@ -27,24 +27,3 @@ export function middleware(req: NextRequest, res: NextResponse) {
     }
   }
 }
-// case 1
-//   if (!token && !isAdmin) {
-//     console.log("redirecting to keycloak");
-//     return NextResponse.redirect(url);
-//   } else {
-//     console.log(isAdmin);
-//     return NextResponse.next();
-//   }
-// }
-// if (req.url.includes("/admin")) {
-//   console.log("admin");
-
-// case 2
-// if (!token) {
-//   // const decoded = promisify(jwt.verify)(token, process.env.JWT_SECRET);
-//   if (decoded.role === "admin") {
-//     return NextResponse.next();
-//   } else {
-//     return NextResponse.redirect(url);
-//   }
-// }
