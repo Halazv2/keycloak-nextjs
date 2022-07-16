@@ -20,7 +20,7 @@ Therefore, the application demonstrates how to create 3 levels of authorization 
 
 
 ```shell script
-git clone   https://github.com/Halazv2/keycloak-nextjs
+git clone https://github.com/Halazv2/keycloak-nextjs.git
 ```
 
 - run the docker-compose file, which deploys Keycloak, MySQL (used by Keycloak) and the web application (both client and server)
