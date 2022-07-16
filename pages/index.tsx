@@ -22,7 +22,7 @@ const IndexPage = () => {
   ) : (
     <span className="text-danger">NOT logged in</span>
   );
-  console.log(keycloak);
+  // console.log(keycloak);
   const welcomeMessage =
     keycloak?.authenticated || (keycloak && parsedToken)
       ? `Welcome back ${parsedToken?.preferred_username ?? ""}!`
@@ -56,23 +56,23 @@ const IndexPage = () => {
   ) : (
     <span>Please login to view profile.</span>
   );
-  useEffect(() => {
-    if (!keycloak?.authenticated) {
-      axios
-        .get("http://localhost:3000/api/profile", {
-          headers: {
-            Authorization: getCookie("token"),
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-    }
-  });
+  // useEffect(() => {
+  //   if (!keycloak?.authenticated) {
+  //     axios
+  //       .get("http://localhost:3000/api/profile", {
+  //         headers: {
+  //           Authorization: getCookie("token"),
+  //         },
+  //       })
+  //       .then((res) => {
+  //         console.log(res);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   } else {
+  //   }
+  // });
   return (
     <Layout>
       <h1 className="mt-5">Hello 👋</h1>

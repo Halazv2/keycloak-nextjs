@@ -45,14 +45,13 @@ const ProfilePage: NextPage = () => {
     <span>Please login to view profile.</span>
   );
   // get cookies from the browser
-  const cookies = getCookie("isAdmin");
   const a = true;
   return (
     <Layout>
       <div></div>
       {getCookie("isAdmin") != true ? (
-        <div className="bg-red-200 p-3 text-center">
-          You can't access this if you're not the admin.
+        <div className="bg-purple-200 p-3 text-center">
+          you should authenticate to see this page
         </div>
       ) : (
         <div>{profile}</div>

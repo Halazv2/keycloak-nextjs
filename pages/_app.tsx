@@ -23,10 +23,6 @@ interface InitialProps {
 }
 
 function MyApp({ Component, pageProps, cookies }: AppProps & InitialProps) {
-  // useEffect(() => {
-
-
-  // });
 
   return (
     <SSRKeycloakProvider

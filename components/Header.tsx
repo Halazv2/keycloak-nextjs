@@ -4,6 +4,8 @@ import Link from "next/link";
 import * as React from "react";
 import { getCookie, removeCookie, setCookie } from "typescript-cookie";
 import { useEffect } from "react";
+import * as jose from "jose";
+
 type ParsedToken = KeycloakTokenParsed & {
   email?: string;
   preferred_username?: string;
@@ -20,9 +22,11 @@ export const Header: React.FC = () => {
   const token = keycloak?.idToken;
   const refreshToken = keycloak?.refreshToken;
   useEffect(() => {
-    setCookie("isAdmin", isAdmin);
-    setCookie("token", token);
-    setCookie("refreshToken", refreshToken);
+    if (keycloak?.authenticated) {
+      setCookie("isAdmin", isAdmin);
+      setCookie("token", token);
+      setCookie("refreshToken", refreshToken);
+    }
   }, [keycloak?.authenticated]);
   return (
     <header className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
@@ -32,8 +36,14 @@ export const Header: React.FC = () => {
         </a>
       </Link>
       <nav className="my-2 my-md-0 mr-md-3">
+        <Link href="/">
+          <a className="p-2 text-dark">Home</a>
+        </Link>
         <Link href="/profile">
           <a className="p-2 text-dark">Profile</a>
+        </Link>
+        <Link href="/admin">
+          <a className="p-2 text-dark">Admin</a>
         </Link>
       </nav>
       {keycloak?.authenticated ? (
