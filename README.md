@@ -18,6 +18,7 @@ Therefore, the application demonstrates how to create 3 levels of authorization 
 - docker
 - nodejs
 
+### Installation steps
 
 ```shell script
 git clone https://github.com/Halazv2/keycloak-nextjs.git
@@ -40,7 +41,4 @@ npm run start
 
 Now the application is ready to be used navigating on ``http://localhost:3006``
 
-Note: the realm installed is already configured with 2 users:
-
-- ``alice`` with user role and password `password`
-- ``test-admin`` with user and admin role and password `password`
+Note: we are working on our internship project and the keycloak server we are using is hosted, clone the repo and modify the URL, realm and clientID 
